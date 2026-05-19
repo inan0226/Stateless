@@ -14,10 +14,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
 
-        // 1. 에러 발생 시 ERROR 레벨로 스택트레이스를 남깁니다. (요구사항 충족)
+        // 에러 발생 시 ERROR 레벨로 스택트레이스를 남깁니다. (요구사항 충족)
         log.error("Exception occurred", e);
 
-        // 2. 클라이언트에게는 깔끔한 에러 메시지와 함께 400 Bad Request 상태 코드를 반환합니다.
+        //  클라이언트에게는 깔끔한 에러 메시지와 함께 400 Bad Request 상태 코드를 반환합니다.
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());

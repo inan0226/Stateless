@@ -1,9 +1,26 @@
-spring:
-  profiles:
-    active: local
+logging:
+  level:
+    root: info
 
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health, info
+  info:
+    env:
+      enabled: true
+
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        instance-profile: true

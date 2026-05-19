@@ -1,9 +1,18 @@
 spring:
+  config:
+    import: aws-parameterstore:/stateless/prod/db/
   datasource:
-    url: jdbc:mysql://[추후생성할_MySQL주소]:3306/팀원DB명?serverTimezone=Asia/Seoul
+    url: "${url}"
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: [ MySQL계정명 ]
-    password: [ MySQL비밀번호 ]
+    username: "${username}"
+    password: "${password}"
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        show-sql: false
     hibernate:
-      ddl-auto: update # 엔티티 변경 사항만 DB에 반영 (운영에서 create-drop은 위험합니다)
+      ddl-auto: validate
+info:
+  app:
+    message: "${team}"
