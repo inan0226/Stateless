@@ -20,6 +20,8 @@ spring:
       max-file-size: 10MB
   cloud:
     aws:
+      s3:
+        bucket: s3-stateless-inan-files
       region:
         static: ap-northeast-2
       credentials:
