@@ -1,30 +1,40 @@
 name: Spring Boot CI/CD
 
-# 1. 언제 이 자동화 스크립트를 실행할 것인가?
 on:
   push:
-    branches: [ "master" ] # main 브랜치에 푸시될 때마다 실행
+    branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest # 깃허브가 빌려주는 컴퓨터(리눅스) 환경
+    runs-on: ubuntu-latest
 
     steps:
-      # 2. 내 코드를 깃허브 컴퓨터로 복사해오기
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 3. 자바 환경 세팅하기 (★여기에 알맞은 버전을 적어주세요!)
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 4. Gradle 실행 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 5. Spring Boot 프로젝트 빌드 (테스트 포함)
       - name: Build with Gradle
         run: ./gradlew clean build
+
+
+
+      # 방금 금고에 넣은 아이디/비번으로 도커 허브에 로그인합니다.
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 2. 이미지를 빌드하고 도커 허브로 푸시(업로드)합니다.
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-spring-app .
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-spring-app
