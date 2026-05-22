@@ -24,17 +24,24 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-
-
-      # 방금 금고에 넣은 아이디/비번으로 도커 허브에 로그인합니다.
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 2. 이미지를 빌드하고 도커 허브로 푸시(업로드)합니다.
+
+      # [새로 추가된 부분] ARM 아키텍처 빌드를 위한 번역기 세팅
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+
+      # [수정된 부분] ARM용(linux/arm64)으로 빌드하고 곧바로 Push
+
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-spring-app .
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-spring-app
+          docker buildx build --platform linux/arm64 -t ${{ secrets.DOCKER_USERNAME }}/my-spring-app --push .
