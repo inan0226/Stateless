@@ -1,5 +1,5 @@
 # 1. Base Image: 자바 실행 환경
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jdk
 
 # 2. 빌드된 jar 파일의 경로를 변수로 설정 (아래는 Gradle 기준)
 ARG JAR_FILE=build/libs/*.jar
