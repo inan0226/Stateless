@@ -1,0 +1,30 @@
+name: Spring Boot CI/CD
+
+# 1. 언제 이 자동화 스크립트를 실행할 것인가?
+on:
+  push:
+    branches: [ "main" ] # main 브랜치에 푸시될 때마다 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 깃허브가 빌려주는 컴퓨터(리눅스) 환경
+
+    steps:
+      # 2. 내 코드를 깃허브 컴퓨터로 복사해오기
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 3. 자바 환경 세팅하기 (★여기에 알맞은 버전을 적어주세요!)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 4. Gradle 실행 권한 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 5. Spring Boot 프로젝트 빌드 (테스트 포함)
+      - name: Build with Gradle
+        run: ./gradlew clean build
